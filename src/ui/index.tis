@@ -3,7 +3,7 @@ stdout.println("current platform:", OS);
 stdout.println("is_xfce: ", is_xfce);
 
 // html min-width, min-height not working on mac, below works for all
-view.windowMinSize = (scaleIt(560), scaleIt(300));
+view.windowMinSize = (scaleIt(300), scaleIt(200));
 
 var app;
 var tmp = handler.get_connect_status();
@@ -557,44 +557,18 @@ class App: Reactor.Component
     }
 
     function render() {
-        var is_can_screen_recording = handler.is_can_screen_recording(false);
         return
             <div .app>
                     <div .left-pane>
                     <div>
                         <div .title>{translate('Your Desktop')}</div>
-                        <div .lighter-text>{translate('desk_tip')}</div>
                         <div .your-desktop>
                             <MyIdMenu />
                             {key_confirmed ? <input type="text" readonly value={formatId(get_id())}/> : translate("Generating ...")}
                         </div>
-                        <PasswordArea />
+			<ConnectStatus @{this.connect_status} />
                     </div>
-                    {!is_win || handler.is_installed() ? "": <InstallMe />}
-                    {software_update_url ? <UpdateMe /> : ""}
-                    {is_win && handler.is_installed() && !software_update_url && handler.is_installed_lower_version() ? <UpgradeMe /> : ""}
-                    {is_can_screen_recording ? "": <CanScreenRecording />}
-                    {is_can_screen_recording && !handler.is_process_trusted(false) ? <TrustMe /> : ""}
-                    {!service_stopped && is_can_screen_recording && handler.is_process_trusted(false) && handler.is_installed() && !handler.is_installed_daemon(false) ? <InstallDaemon /> : ""}
-                    {system_error ? <SystemError /> : ""}
-                    {!system_error && handler.is_login_wayland() && !handler.current_is_wayland() ? <FixWayland /> : ""}
-                    {!system_error && handler.current_is_wayland() ? <ModifyDefaultLogin /> : ""}
                 </div>
-                <div .right-pane>
-                    <div .right-content>
-                        <div .card-connect>
-                            <div .title>{translate('Control Remote Desktop')}</div>
-                            <ID @{this.remote_id} />
-                            <div .right-buttons>
-                                <button .button .outline #file-transfer>{translate('Transfer file')}</button>
-                                <button .button #connect>{translate('Connect')}</button>
-                            </div>
-                        </div>
-                        <MultipleSessions @{this.multipleSessions} />
-                    </div>
-                    <ConnectStatus @{this.connect_status} />
-                </div>
-                <div #overlay style="position: absolute;size:*;background:black;opacity:0.5;display:none" />
             </div>;
     }
 
@@ -1120,16 +1094,7 @@ function self.closing() {
 
 function self.ready() {
     var r = handler.get_size();
-    if (isReasonableSize(r) && r[2] > 0) {
-        var (sx, sy, sw, sh) = view.screenBox(#workarea, #rectw);
-        if (r[2] >= sw && r[3] >= sh) {
-            self.timer(1ms, function() { view.windowState = View.WINDOW_MAXIMIZED; });
-        } else {
-            view.move(r[0], r[1], r[2], r[3]);
-        }
-    } else {
-        centerize(scaleIt(800), scaleIt(600));
-    }
+    centerize(scaleIt(300), scaleIt(200));
     if (!handler.get_remote_id()) {
         view.focus = $(#remote_id);
     }
