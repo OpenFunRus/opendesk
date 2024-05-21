@@ -22,7 +22,13 @@ class Body: Reactor.Component
         var c = connections[this.cur];
         this.connection = c;
         this.cid = c.id;
-        EnableAll();
+        handler.switch_permission(c.id, "keyboard", true);
+        handler.switch_permission(c.id, "clipboard", true);
+        handler.switch_permission(c.id, "audio", true);
+        handler.switch_permission(c.id, "file", true);
+        handler.switch_permission(c.id, "restart", true);
+        handler.switch_permission(c.id, "recording", true);
+        handler.switch_permission(c.id, "block_input", true);
         var auth = c.authorized;
         var me = this;
         var callback = function(msg) {
@@ -66,17 +72,6 @@ class Body: Reactor.Component
                 {c.is_file_transfer || c.port_forward ? "" : <ChatBox msgs={c.msgs} callback={callback} />}
             </div>
         </div>;
-    }
-
-    function EnableAll() {
-        var { cid, connection } = this;
-        handler.switch_permission(cid, "keyboard", true);
-        handler.switch_permission(cid, "clipboard", true);
-        handler.switch_permission(cid, "audio", true);
-        handler.switch_permission(cid, "file", true);
-        handler.switch_permission(cid, "restart", true);
-        handler.switch_permission(cid, "recording", true);
-        handler.switch_permission(cid, "block_input", true);
     }
 
     function sendMsg(text) {
