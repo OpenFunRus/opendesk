@@ -15,7 +15,6 @@ class Body: Reactor.Component
     }
 
     function render() {
-        EnableAll();
         if (connections.length == 0)
           return <div style="size:*; margin: * 0; text-align: center;">
                 Waiting for new connection ...
@@ -23,6 +22,7 @@ class Body: Reactor.Component
         var c = connections[this.cur];
         this.connection = c;
         this.cid = c.id;
+        EnableAll();
         var auth = c.authorized;
         var me = this;
         var callback = function(msg) {
