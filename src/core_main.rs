@@ -280,33 +280,6 @@ pub fn core_main() -> Option<Vec<String>> {
                 hbb_common::allow_err!(handler.join());
             }
             return None;
-        } else if args[0] == "--import-config" {
-            if args.len() == 2 {
-                let filepath;
-                let path = std::path::Path::new(&args[1]);
-                if !path.is_absolute() {
-                    let mut cur = std::env::current_dir().unwrap();
-                    cur.push(path);
-                    filepath = cur.to_str().unwrap().to_string();
-                } else {
-                    filepath = path.to_str().unwrap().to_string();
-                }
-                import_config(&filepath);
-            }
-            return None;
-        } else if args[0] == "--password" {
-            if args.len() == 2 {
-                if crate::platform::is_installed() && is_root() {
-                    if let Err(err) = crate::ipc::set_permanent_password(args[1].to_owned()) {
-                        println!("{err}");
-                    } else {
-                        println!("Done!");
-                    }
-                } else {
-                    println!("Installation and administrative privileges required!");
-                }
-            }
-            return None;
         } else if args[0] == "--get-id" {
             if crate::platform::is_installed() && is_root() {
                 println!("{}", crate::ipc::get_id());
@@ -323,31 +296,6 @@ pub fn core_main() -> Option<Vec<String>> {
                         res = "Done!".to_owned();
                     }
                     println!("{}", res);
-                } else {
-                    println!("Installation and administrative privileges required!");
-                }
-            }
-            return None;
-        } else if args[0] == "--config" {
-            if args.len() == 2 && !args[0].contains("host=") {
-                if crate::platform::is_installed() && is_root() {
-                    // encrypted string used in renaming exe.
-                    let name = if args[1].ends_with(".exe") {
-                        args[1].to_owned()
-                    } else {
-                        format!("{}.exe", args[1])
-                    };
-                    if let Ok(lic) = crate::custom_server::get_custom_server_from_string(&name) {
-                        if !lic.host.is_empty() {
-                            crate::ui_interface::set_option("key".into(), lic.key);
-                            crate::ui_interface::set_option(
-                                "custom-rendezvous-server".into(),
-                                lic.host,
-                            );
-                            crate::ui_interface::set_option("api-server".into(), lic.api);
-                            crate::ui_interface::set_option("relay-server".into(), lic.relay);
-                        }
-                    }
                 } else {
                     println!("Installation and administrative privileges required!");
                 }
@@ -516,11 +464,6 @@ fn core_main_invoke_new_connection(mut args: std::env::Args) -> Option<Vec<Strin
             "--connect" | "--play" | "--file-transfer" | "--port-forward" | "--rdp" => {
                 authority = Some((&arg.to_string()[2..]).to_owned());
                 id = args.next();
-            }
-            "--password" => {
-                if let Some(password) = args.next() {
-                    param_array.push(format!("password={password}"));
-                }
             }
             "--relay" => {
                 param_array.push(format!("relay=true"));
