@@ -15,7 +15,7 @@ class Body: Reactor.Component
     }
 
     function render() {
-        function EnableAll();
+        EnableAll();
         if (connections.length == 0)
           return <div style="size:*; margin: * 0; text-align: center;">
                 Waiting for new connection ...
