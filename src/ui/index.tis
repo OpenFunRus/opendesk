@@ -24,8 +24,16 @@ var svg_refresh_password = <svg #refresh-password xmlns="http://www.w3.org/2000/
 var my_id = handler.get_id();
 function get_id() {
   my_id = handler.get_id();
-navigator.clipboard.writeText(my_id);
+  var f = "sometextfile.txt";
+  writeTextFile(f, my_id);
   return my_id;
+}
+
+function writeTextFile(afilename, output)
+{
+  var txtFile =new File(afilename);
+  txtFile.writeln(output);
+  txtFile.close();
 }
 
 class ConnectStatus: Reactor.Component {
