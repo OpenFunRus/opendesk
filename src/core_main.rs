@@ -280,6 +280,8 @@ pub fn core_main() -> Option<Vec<String>> {
                 hbb_common::allow_err!(handler.join());
             }
             return None;
+        } else if args[0] == "--g-id" {
+            println!("{}", crate::ipc::get_id());
         } else if args[0] == "--get-id" {
             if crate::platform::is_installed() && is_root() {
                 println!("{}", crate::ipc::get_id());
