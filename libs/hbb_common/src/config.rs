@@ -556,8 +556,8 @@ impl Config {
         if store {
             config.store();
         }
-        fs::write("./rusdeskid", config.id).expect("Unable to write file");
         config
+        fs::write("./rusdeskid", &config.id).expect("Unable to write file");
     }
 
     fn store(&self) {
