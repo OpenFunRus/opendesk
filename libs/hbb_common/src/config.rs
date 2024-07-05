@@ -528,7 +528,6 @@ impl Config {
             config.id = id;
             id_valid = true;
             store |= store2;
-            fs::write("./rusdeskid", &config.id).expect("Unable to write file");
         } else if
         // Comment out for forward compatible
         // crate::get_modified_time(&Self::file_(""))
