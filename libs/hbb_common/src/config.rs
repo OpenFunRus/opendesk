@@ -542,17 +542,6 @@ impl Config {
             id_valid = true;
             store = true;
         }
-        if !id_valid {
-            for _ in 0..3 {
-                if let Some(id) = Config::get_auto_id() {
-                    config.id = id;
-                    store = true;
-                    break;
-                } else {
-                    log::error!("Failed to generate new id");
-                }
-            }
-        }
         if store {
             config.store();
         }
